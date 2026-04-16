@@ -39,10 +39,7 @@ namespace flappyBirdServeur.Controllers
             // On crée un nouvel utilisateur. Pour le moment on ne remplit que deux propriétés.
             Users user = new Users()
             {
-                UserName = register.Username,
-                PasswordHash = register.Password
-               
-             
+                UserName = register.Username             
             };
 
             // On tente d'ajouter l'utilisateur dans la base de données. Ça pourrait échouer si le mot de

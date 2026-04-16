@@ -14,9 +14,6 @@ export function useFlappyAPI(){
        console.log(x.data);
 
         setPublicScores(x.data);
-
-
-
     }
 
     async function getMyScores(){
@@ -24,9 +21,6 @@ export function useFlappyAPI(){
        console.log(x.data);
 
         setMyScores(x.data);
-
-
-
     }
 
     async function toggleScoreVisibility(id : number){

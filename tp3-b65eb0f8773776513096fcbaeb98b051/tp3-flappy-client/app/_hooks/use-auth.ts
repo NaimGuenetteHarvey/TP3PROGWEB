@@ -5,11 +5,12 @@ const domain = "https://localhost:7279/";
 export function useAuth() {
 
     async function register(username: string, password: string, passwordConfirm: string) {
-       const x = await axios.post(domain + "api/Users/Register", {
+       const registerDTO = await axios.post(domain + "api/Users/Register", {
             username : username, 
             password : password, 
             passwordConfirm : passwordConfirm, 
         });
+        const x = await axios.post(domain + "api/Users/Register", registerDTO);
         console.log(x.data);
 
 
