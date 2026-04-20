@@ -26,35 +26,32 @@ namespace flappyBirdServeur.Controllers
         {
             _userManager = userManager;
         }
-        [HttpPost]
-        public async Task<ActionResult> Register(RegisterDTO register)
+     [HttpPost]
+     public async Task<ActionResult> Register(RegisterDTO register)
+     {
+ 
+        if (register.Password != register.PasswordConfirm)
         {
-            // Si Password et PasswordConfirm sont diférérent, on retourne une erreur.
-            if (register.Password != register.PasswordConfirm)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest,
-                    new { Message = "Les deux mots de passe spécifiés sont différents." });
-            }
-
-            // On crée un nouvel utilisateur. Pour le moment on ne remplit que deux propriétés.
-            Users user = new Users()
-            {
-                UserName = register.Username             
-            };
-
-            // On tente d'ajouter l'utilisateur dans la base de données. Ça pourrait échouer si le mot de
-            // passe ne respecte pas les conditions ou que le pseudonyme est déjà utilisé.
-            IdentityResult identityResult = await _userManager.CreateAsync(user, register.Password);
-
-            // Si la création a échoué, on retourne une erreur. N'hésitez pas à mettre un breakpoint ici
-            // pour inspecter l'objet identityResult si vous avez du mal à créer des utilisateurs.
-            if (!identityResult.Succeeded)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest,
-                    new { Message = "La création de l'utilisateur a échoué." });
-            }
-            return Ok(new { Message = "Inscription réussie ! 🥳" });
+            return BadRequest(new { Message = "Les deux mots de passe spécifiés sont différents." });
         }
+
+        Users user = new Users()
+        {
+            UserName = register.Username
+        };
+
+        IdentityResult identityResult = await _userManager.CreateAsync(user, register.Password);
+
+        if (!identityResult.Succeeded)
+        {
+           return StatusCode(StatusCodes.Status400BadRequest,
+           new { Message = "La création de l'utilisateur a échoué." });
+        }
+
+        return Ok(new { Message = "Inscription réussie" });
+    
+   
+      }
 
         [HttpPost]
         public async Task<ActionResult> Login(LoginDTO login)
@@ -79,7 +76,7 @@ namespace flappyBirdServeur.Controllers
                     .GetBytes("LooOOongue Phrase SiNoN Ça ne Marchera PaAaAAAaAas !")); // Phrase identique dans Program.cs
                 JwtSecurityToken token = new JwtSecurityToken(
                     issuer: "https://localhost:7279", // ⛔ Vérifiez le PORT de votre serveur dans launchSettings.json !
-                    audience: "http://localhost:4200",
+                    audience: "http://localhost:3000",
                     claims: authClaims,
                     expires: DateTime.Now.AddMinutes(30), // Durée de validité du token
                     signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)

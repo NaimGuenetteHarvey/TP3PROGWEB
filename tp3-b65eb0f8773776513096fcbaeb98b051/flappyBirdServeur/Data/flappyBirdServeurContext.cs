@@ -11,6 +11,6 @@ namespace flappyBirdServeur.Data
         {
         }
         public DbSet<Scores> Scores { get; set; }
-        public DbSet<Users> Users { get; set; }
+        
     }
 }
