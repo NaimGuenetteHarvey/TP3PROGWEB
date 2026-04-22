@@ -6,9 +6,10 @@ namespace flappyBirdServeur.Models
     {
       public int Id { get; set; }
       public int Points { get; set; }
+      public int Chrono { get; set; }
       public bool IsPublic { get; set; }
       public string? UserId { get; set; }
       [JsonIgnore]
-      public virtual List<Users> Users { get; set; } = new List<Users>();
+      public virtual Users? User { get; set; }
     }
 }
