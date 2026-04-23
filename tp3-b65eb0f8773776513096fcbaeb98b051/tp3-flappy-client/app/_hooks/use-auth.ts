@@ -10,13 +10,9 @@ export function useAuth() {
             password,
             passwordConfirm,
         };
-
-     
             const x = await axios.post(domain + "api/Users/Register", registerDTO);
             console.log(x.data);
     }
-
-  
 
     async function login(username: string, password: string) {
         
@@ -29,12 +25,8 @@ export function useAuth() {
         localStorage.setItem("token", x.data.token);
     }
     
-      async function logout(){
+     
 
-        localStorage.removeItem("token");
-
-    }
-
-    return { register, login,logout };
+    return { register, login };
 
 }
