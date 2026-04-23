@@ -24,60 +24,36 @@ namespace flappyBirdServeur.Controllers
             _userManager = userManager;
         }
         [HttpGet("GetBestScores")]
-        public async Task<ActionResult<IEnumerable<Scores>>> GetBestScoresAsync()
+        public async Task<ActionResult<IEnumerable<DisplayDTO>>> GetBestScores()
         {
-            return await _scoreService.GetBestScoresAsync();
+            return await _scoreService.GetBestScores();
         }
 
         [HttpGet("GetMyScores")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Scores>>> GetMyScoresAsync()
+        public async Task<ActionResult<IEnumerable<Scores>>> GetMyScores()
         {
             Users? user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
+            var score = await _scoreService.GetMyScores(user.Id);
             if (user == null)
             {
                 return Unauthorized();
             }
 
-            return await _scoreService.GetMyScoresAsync(user.Id);
+            return Ok(score);
         }
 
         [HttpPut("ChangeScoreVisibility/{id}")]
-        public async Task<IActionResult> ChangeScoreVisibilityAsync(int id)
+        public async Task<IActionResult> ChangeScoreVisibility(int id)
         {
-            Users? user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            Scores? score = await _scoreService.GetScoreByIdAsync(id);
-
-            if (score == null)
-            {
-                return NotFound();
-            }
-
-            if (score.UserId != user.Id)
-            {
-                return Forbid();
-            }
-
-            bool success = await _scoreService.ChangeScoreVisibilityAsync(score);
-
-            if (!success)
-            {
-                return StatusCode(500, new { Message = "Veuillez réessayer plus tard." });
-            }
-
-            return NoContent();
+         
+            await _scoreService.ChangeScoreVisibility(id);
+            return Ok();
         }
 
         [HttpPost("PostScore")]
-        [Authorize]
-        public async Task<ActionResult<Scores>> PostScoreAsync(DisplayDTO displayDTO)
+
+        public async Task<ActionResult<Scores>> PostScore(ScoreDTO scoreDTO)
         {
             Users? user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -85,14 +61,17 @@ namespace flappyBirdServeur.Controllers
 
             Scores score = new Scores
             {
-                Points = displayDTO.Points,
-                Chrono = displayDTO.Chrono,
+                Id = 0,
+                Points = scoreDTO.Points,
+                Chrono = scoreDTO.Chrono,
+                Visibilité = true,
+                Date = DateTime.Now.ToString(),         
                 UserId = user.Id
             };
 
-            Scores newScore = await _scoreService.PostScoreAsync(score);
+             await _scoreService.PostScore(scoreDTO, user);
 
-            return Ok(newScore);
+            return Ok(score);
         }
     }
 }
