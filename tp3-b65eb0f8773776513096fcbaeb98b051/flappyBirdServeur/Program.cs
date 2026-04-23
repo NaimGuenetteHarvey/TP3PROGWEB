@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using flappyBirdServeur.Data;
 using flappyBirdServeur.Models;
+using flappyBirdServeur.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<flappyBirdServeurContext>(options =>
     options.UseLazyLoadingProxies(); // Ceci
 });
 builder.Services.AddIdentity<Users, IdentityRole>().AddEntityFrameworkStores<flappyBirdServeurContext>();
+builder.Services.AddScoped<ScoreService>();
 builder.Services.AddAuthentication(options =>
 {
     // Indiquer à ASP.NET Core que nous procéderons à l'authentification par le biais d'un JWT

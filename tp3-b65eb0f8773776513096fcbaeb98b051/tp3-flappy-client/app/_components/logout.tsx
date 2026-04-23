@@ -14,6 +14,7 @@ export default function Logout() {
         setAlertOn(true);
         
         // Supprimer le token ici !
+        localStorage.removeItem("token");
 
     }
 

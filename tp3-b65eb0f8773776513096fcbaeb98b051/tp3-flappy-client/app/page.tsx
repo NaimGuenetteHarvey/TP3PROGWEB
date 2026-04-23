@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Game } from "./_types/gameLogic/game";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { apiRequest } from "./interceptor";
 
 export default function Home() {
 
@@ -23,6 +24,17 @@ export default function Home() {
   async function postScore() {
     if (scoreSent) return;
     setScoreSent(true);
+    
+
+    const score = sessionStorage.getItem("score");
+    const time = sessionStorage.getItem("time");
+    
+    const newScore = {
+        points: Number(score),
+        chrono: Number(time)
+    };
+    const x = await apiRequest.post("https://localhost:7279/api/Scores/PostScore", newScore);
+    console.log(x.data);
 
     // 💡 Le SCORE et le CHRONO peuvent être récupérés dans
     // sessionStorage.getItem("score") et sessionStorage.getItem("time")

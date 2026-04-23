@@ -2,11 +2,11 @@ export class Score{
 
     constructor(
         public id : number,
-        public username : string | null,
-        public gameDate : string,
-        public timeInSeconds : number,
-        public scoreValue : number,
-        public isPublic : boolean
+        public Pseudo : string | null,
+        public Date : string,
+        public Chrono : number,
+        public Points : number,
+        public Visibilité : boolean
     ){}
 
 }

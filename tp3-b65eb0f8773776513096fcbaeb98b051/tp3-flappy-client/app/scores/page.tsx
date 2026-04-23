@@ -20,7 +20,11 @@ export default function Scores() {
     useEffect(() => {
 
         getBestPublicScores();
-        if(false) getMyScores(); // Trouvez le moyen de seulement demander les scores personnels s'il y a un token dans le stockage du navigateur !
+        const token = localStorage.getItem("token");
+       if (token) {
+        setIsLogged(true);
+        getMyScores();
+    }
 
     }, []);
     
@@ -56,10 +60,10 @@ export default function Scores() {
                             {
                                 myScores.map(s => 
                                     <tr key={s.id} className="text-center">
-                                        <td>{s.scoreValue}</td>
-                                        <td>{formatScore(s.timeInSeconds)} s.</td>
-                                        <td>{s.gameDate}</td>
-                                        <td onClick={() => toggleScoreVisibility(s.id)}>{s.isPublic ? <Eye /> : <EyeOff /> }</td>
+                                        <td>{s.points}</td>
+                                        <td>{formatScore(s.chrono)} s.</td>
+                                        <td>{s.date}</td>
+                                        <td onClick={() => toggleScoreVisibility(s.id)}>{s.visibilité ? <Eye /> : <EyeOff /> }</td>
                                     </tr>
                                 )
                             }
@@ -99,10 +103,10 @@ export default function Scores() {
                             {
                                 publicScores.map(s => 
                                     <tr key={s.id} className="text-center">
-                                        <td>{s.username}</td>
-                                        <td>{s.scoreValue}</td>
-                                        <td>{formatScore(s.timeInSeconds)} s.</td>
-                                        <td>{s.gameDate}</td>
+                                        <td>{s.pseudo}</td>
+                                        <td>{s.points}</td>
+                                        <td>{formatScore(s.chrono)} s.</td>
+                                        <td>{s.date}</td>
                                     </tr>
                                 )
                             }
